@@ -57,7 +57,8 @@ const Calendar = () => {
       height={'90vh'}
       events={events}
       editable={true}
-
+      selectable={true}
+      selectMirror={true}
       eventDidMount={(info) => {
         return new bootstrap.Popover(info.el, {
           title: info.event.title,
