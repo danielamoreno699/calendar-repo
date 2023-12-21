@@ -18,7 +18,14 @@ const Calendar = () => {
   const [clickedDate, setClickedDate] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
 
+  const [selectedService, setSelectedService] = useState(null);
+  const [clientName, setClientName] = useState('')
+  const [eventCreate, setEventCreate] = useState([])
+
   const handleDateClick = (info) => {
+
+   
+
     const clickedTime = new Date(info.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     setClickedDate(clickedTime)
     //setClickedDate(info.dateStr);
@@ -33,7 +40,13 @@ const Calendar = () => {
   }
 
   const handleCloseReservationModal = () => {
+
+
+
     setShowReservationModal(false);
+   
+
+
   }
 
   const handleCloseModal = () => {
@@ -58,6 +71,38 @@ const Calendar = () => {
       resourceId: 1,
     },
   ];
+
+  const onHandleChange = (event) => {
+    const { name, value } = event.target;
+    if (name === 'name') {
+      setClientName(value);
+    } else if (name === 'service') {
+      setSelectedService(value);
+    }
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    handleCloseReservationModal();
+    console.log('submit');
+    if (selectedService && clientName) {
+      const clickedDateTime = new Date(clickedDate);
+      const endDateTime = new Date(clickedDateTime);
+      endDateTime.setHours(clickedDateTime.getHours() + 1);
+
+      const newEvent = {
+        title: `Reservation for ${clientName}`,
+        service: selectedService,
+        start: clickedDateTime,
+        end: endDateTime, 
+      };
+
+      setEventCreate([...eventCreate, newEvent]);
+    }
+    else{
+      console.log('error');
+    }
+  };
 
   return (
     <>
@@ -119,16 +164,16 @@ const Calendar = () => {
           </Modal.Header>
 
           <Modal.Body>
-          <Form.Label htmlFor="name">professional</Form.Label>
-          <Form.Select aria-label="Default select example">
-            <option>select professional</option>
-            <option value="1">professional A</option>
-            <option value="2">professional B</option>
-           <option value="3">professional C</option>
-        </Form.Select>
+          <Form onSubmit={handleSubmit}>
+          
+         
 
         <Form.Label htmlFor="name">service</Form.Label>
-        <Form.Select aria-label="Default select example">
+        <Form.Select aria-label="Default select example"
+         name="service"
+          value={selectedService}
+         onChange={onHandleChange}
+         >
             <option>select service</option>
             <option value="1">service A</option>
             <option value="2">service B</option>
@@ -138,9 +183,13 @@ const Calendar = () => {
         <Form.Label htmlFor="name">name</Form.Label>
         <Form.Control
         type="text"
-        placeholder='name'
-        id="client-name"
-        name="client-name"
+       
+        id="name"
+        name="name"
+        value={clientName}
+        onChange={onHandleChange}
+        
+
         
       />
 
@@ -151,23 +200,22 @@ const Calendar = () => {
         readOnly
         />
 
-
+        <Form.Label htmlFor="selected-date">selected date</Form.Label>
           <DatePicker
               selected={selectedDate}
               onChange={(date) => setSelectedDate(date)}
               dateFormat="MMMM d, yyyy"
+
             />
 
+            <Button type="submit" variant="primary" >
+              reserve
+            </Button>
       
 
-            
+          </Form>
           </Modal.Body>
-          <Modal.Footer>
           
-            <Button variant="primary" onClick={handleCloseReservationModal}>
-              Save Changes
-            </Button>
-          </Modal.Footer>
 
        
         </Modal>
