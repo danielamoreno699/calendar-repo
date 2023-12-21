@@ -22,6 +22,8 @@ const Calendar = () => {
   const [clientName, setClientName] = useState('')
   const [eventCreate, setEventCreate] = useState([])
 
+  const [hours, minutes] = clickedDate.split(':');
+
   const handleDateClick = (info) => {
 
    
@@ -55,7 +57,7 @@ const Calendar = () => {
 
   const events = [
     {
-      title: 'Event 1',
+      title: 'not available',
       start: '2023-12-20T18:00:00',
       end: '2023-12-20T23:00:00',
       display: 'background', // block that schedule
@@ -86,7 +88,11 @@ const Calendar = () => {
     handleCloseReservationModal();
     console.log('submit');
     if (selectedService && clientName) {
-      const clickedDateTime = new Date(clickedDate);
+
+      const clickedDateTime = new Date(selectedDate);
+      clickedDateTime.setHours(parseInt(hours, 10));
+      clickedDateTime.setMinutes(parseInt(minutes, 10));
+      //const clickedDateTime = {clickedDate};
       const endDateTime = new Date(clickedDateTime);
       endDateTime.setHours(clickedDateTime.getHours() + 1);
 
@@ -95,9 +101,13 @@ const Calendar = () => {
         service: selectedService,
         start: clickedDateTime,
         end: endDateTime, 
+        overlap: false,
+        color: 'red',
+        resourceId: 1,
       };
 
       setEventCreate([...eventCreate, newEvent]);
+      console.log('Created Event:', newEvent);
     }
     else{
       console.log('error');
@@ -121,7 +131,8 @@ const Calendar = () => {
           right: 'dayGridMonth,resourceTimeGridWeek,resourceTimeGridDay',
         }}
         height={'90vh'}
-        events={events}
+        events={eventCreate}
+        // events={events}
         dateClick={handleDateClick}
         selectable={true}
         selectMirror={true}
@@ -196,14 +207,15 @@ const Calendar = () => {
       <Form.Label htmlFor="clicked-date">clicked date</Form.Label>
         <Form.Control
         type="text"
-        value={clickedDate}
+        value={clickedDate.toString()} 
+        
         readOnly
         />
 
         <Form.Label htmlFor="selected-date">selected date</Form.Label>
           <DatePicker
               selected={selectedDate}
-              onChange={(date) => setSelectedDate(date)}
+              onChange={(date) => setSelectedDate(date.getDate())}
               dateFormat="MMMM d, yyyy"
 
             />
