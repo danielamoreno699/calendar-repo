@@ -22,7 +22,7 @@ const Calendar = () => {
   const [clientName, setClientName] = useState('')
   const [eventCreate, setEventCreate] = useState([])
 
-  const [hours, minutes] = clickedDate.split(':');
+  const [hours, minutes] = clickedDate;
 
   const handleDateClick = (info) => {
 
