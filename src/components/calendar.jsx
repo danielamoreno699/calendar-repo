@@ -22,7 +22,12 @@ const Calendar = () => {
   const [clientName, setClientName] = useState('')
   const [eventCreate, setEventCreate] = useState([])
 
-  const [hours, minutes] = clickedDate;
+  const [selectedResource, setSelectedResource] = useState(null)
+
+  const [hours, minutes] = clickedDate ? clickedDate.split(':') : ['00', '00'];
+
+
+  console.log('clickdate', typeof clickedDate)
 
   const handleDateClick = (info) => {
 
@@ -30,6 +35,9 @@ const Calendar = () => {
 
     const clickedTime = new Date(info.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     setClickedDate(clickedTime)
+
+    const resourceId = info.resource ? info.resource.id : null;
+    setSelectedResource(resourceId);
     //setClickedDate(info.dateStr);
     setShowModal(true);
   };
@@ -88,7 +96,7 @@ const Calendar = () => {
     handleCloseReservationModal();
     console.log('submit');
     if (selectedService && clientName) {
-
+    
       const clickedDateTime = new Date(selectedDate);
       clickedDateTime.setHours(parseInt(hours, 10));
       clickedDateTime.setMinutes(parseInt(minutes, 10));
