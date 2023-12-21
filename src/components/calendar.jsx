@@ -11,6 +11,7 @@ import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useEffect } from 'react';
 
 const Calendar = () => {
   const [showModal, setShowModal] = useState(false);
@@ -20,7 +21,28 @@ const Calendar = () => {
 
   const [selectedService, setSelectedService] = useState(null);
   const [clientName, setClientName] = useState('')
-  const [eventCreate, setEventCreate] = useState([])
+  //const [eventCreate, setEventCreate] = useState([])
+  const [eventCreate, setEventCreate] = useState([
+
+
+    {
+      title: 'Event 1',
+      start: '2023-12-21T10:00:00',
+      end: '2023-12-21T11:00:00',
+      display: 'background', // block that schedule
+      overlap: false,
+      resourceId: 1,
+    },
+    {
+      title: 'Event 2',
+      color: '#388e3c',
+      start: '2023-12-21T20:00:00',
+      end: '2023-12-21T21:00:00',
+      overlap: false,
+      resourceId: 1,
+    },
+  ])
+
 
   const [selectedResource, setSelectedResource] = useState(null)
 
@@ -28,6 +50,8 @@ const Calendar = () => {
 
 
   console.log('clickdate', typeof clickedDate)
+
+
 
   const handleDateClick = (info) => {
 
@@ -140,11 +164,15 @@ const Calendar = () => {
           right: 'dayGridMonth,resourceTimeGridWeek,resourceTimeGridDay',
         }}
         height={'90vh'}
-        events={eventCreate}
-        // events={events}
-        dateClick={handleDateClick}
+        editable={true}
+        
         selectable={true}
         selectMirror={true}
+        events={eventCreate}
+       
+        
+        dateClick={handleDateClick}
+        
         eventDidMount={(info) => {
           return new bootstrap.Popover(info.el, {
             title: info.event.title,
@@ -153,6 +181,7 @@ const Calendar = () => {
             content: `Start: ${info.event.start}`,
           });
         }}
+        
       />
       {showModal && (
         <Modal show={showModal} onHide={handleCloseModal}>
