@@ -111,7 +111,8 @@ const Calendar = () => {
         end: endDateTime, 
         overlap: false,
         color: 'red',
-        resourceId: 1,
+        resourceId: selectedResource,
+        //resourceId: 1,
       };
 
       setEventCreate([...eventCreate, newEvent]);
